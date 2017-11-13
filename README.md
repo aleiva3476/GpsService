@@ -5,3 +5,5 @@ Service to collect readings of GPS devices and record them in a PostgreSQL datab
     * x_DB_SQL_x/GEO.sql
 * Installation script for NSIS:
     * x_NSIS_Installer_x/GPSService.nsi
+
+(Meiligao proccess is based on: https://github.com/brimzi/meitrack-protocols)
