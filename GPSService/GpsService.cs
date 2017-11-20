@@ -12,8 +12,8 @@ namespace GPSService
 {
     public partial class GpsService : ServiceBase
     {
-        private readonly int PUERTO = 9081;
-        private readonly IPAddress DIRECCION_IP = IPAddress.Any;
+        private readonly int SERVICE_PORT = 9081;
+        private readonly IPAddress IP_ADDRESS = IPAddress.Any;
 
         private TcpListener listener;
         private Thread hilo;
@@ -28,7 +28,7 @@ namespace GPSService
         {
             AuxSystemLog.AppName = System.Reflection.Assembly.GetExecutingAssembly().GetName().Name;
 
-            bool conexionOk = AuxSql.TestServerConn("127.0.0.1", "GEO", "postgres", "postgres");
+            bool conexionOk = AuxSql.TestServerConn();
             if (!conexionOk)
             {
                 string textoError = "Error conectando con la base de datos";
@@ -40,10 +40,10 @@ namespace GPSService
                 throw new Exception(textoError);
             }
 
-            this.listener = new TcpListener(DIRECCION_IP, PUERTO);
+            this.listener = new TcpListener(IP_ADDRESS, SERVICE_PORT);
             if (listener == null)
             {
-                string textoError = $"Error creando TcpListener en {DIRECCION_IP}:{PUERTO}";
+                string textoError = $"Error creando TcpListener en {IP_ADDRESS}:{SERVICE_PORT}";
                 AuxSystemLog.Error(textoError);
                 throw new Exception(textoError);
             }
@@ -55,7 +55,6 @@ namespace GPSService
             };
             this.hilo.Start();
         }
-
 
         protected override void OnStop()
         {

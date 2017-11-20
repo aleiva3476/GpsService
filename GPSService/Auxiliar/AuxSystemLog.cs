@@ -1,28 +1,56 @@
 ﻿using System;
 using System.Diagnostics;
-using System.Text;
 
 namespace GPSService
 {
+    /// <summary>
+    /// This class contains methods for inserting records into the system event log
+    /// </summary>
     class AuxSystemLog
     {
         public static string AppName = "";
 
+        /// <summary>
+        /// Writes an information record
+        /// If there are optional parameters, string.Format () will be used to format the text that it receives as the first parameter
+        /// </summary>
+        /// <param name="text">Text that we are going to record</param>
+        /// <param name="paramList">Optional params.</param>
         public static void Information(string text, params object[] paramList)
         {
-            Escribe(EventLogEntryType.Information, text, paramList);
+            WriteEvent(EventLogEntryType.Information, text, paramList);
         }
 
+        /// <summary>
+        /// Writes a warning record
+        /// If there are optional parameters, string.Format () will be used to format the text that it receives as the first parameter
+        /// </summary>
+        /// <param name="text">Text that we are going to record</param>
+        /// <param name="paramList">Optional params.</param>
         public static void Warning(string text, params object[] paramList)
         {
-            Escribe(EventLogEntryType.Warning, text, paramList);
-        }
-        public static void Error(string text, params object[] paramList)
-        {
-            Escribe(EventLogEntryType.Error, text, paramList);
+            WriteEvent(EventLogEntryType.Warning, text, paramList);
         }
 
-        public static void Escribe(EventLogEntryType tipoEvento, string text, params object[] paramList)
+        /// <summary>
+        /// Writes an error record
+        /// If there are optional parameters, string.Format () will be used to format the text that it receives as the first parameter
+        /// </summary>
+        /// <param name="text">Text that we are going to record</param>
+        /// <param name="paramList">Optional params.</param>
+        public static void Error(string text, params object[] paramList)
+        {
+            WriteEvent(EventLogEntryType.Error, text, paramList);
+        }
+
+        /// <summary>
+        /// Writes a record into the system event log
+        /// If there are optional parameters, string.Format () will be used to format the text that it receives as the first parameter
+        /// </summary>
+        /// <param name="tipoEvento">Event type</param>
+        /// <param name="text">Text that we are going to record</param>
+        /// <param name="paramList">Optional params.</param>
+        private static void WriteEvent(EventLogEntryType tipoEvento, string text, params object[] paramList)
         {
             EventLog oEventLog = new EventLog();
             try
@@ -52,28 +80,28 @@ namespace GPSService
             }
         }
 
-        public static void Escribe(Exception ex, string text)
-        {
-            StringBuilder sb = new StringBuilder();
+        //public static void WriteEvent(Exception ex, string text)
+        //{
+        //    StringBuilder sb = new StringBuilder();
 
-            if (text != null)
-            {
-                sb.AppendFormat("{0}{1}", text, Environment.NewLine);
-            }
+        //    if (text != null)
+        //    {
+        //        sb.AppendFormat("{0}{1}", text, Environment.NewLine);
+        //    }
 
-            if (ex != null)
-            {
-                sb.AppendFormat("{0}{1}", ex.Message, Environment.NewLine);
-                Exception inner = ex.InnerException;
-                while (inner != null)
-                {
-                    sb.AppendFormat("[{0}] {1}{2}", inner.GetType(), inner.Message, Environment.NewLine);
-                    inner = inner.InnerException;
-                }
-            }
+        //    if (ex != null)
+        //    {
+        //        sb.AppendFormat("{0}{1}", ex.Message, Environment.NewLine);
+        //        Exception inner = ex.InnerException;
+        //        while (inner != null)
+        //        {
+        //            sb.AppendFormat("[{0}] {1}{2}", inner.GetType(), inner.Message, Environment.NewLine);
+        //            inner = inner.InnerException;
+        //        }
+        //    }
 
-            Escribe(EventLogEntryType.Error, sb.ToString());
-        }
+        //    WriteEvent(EventLogEntryType.Error, sb.ToString());
+        //}
 
     }
 }

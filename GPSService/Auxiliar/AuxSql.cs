@@ -7,20 +7,30 @@ namespace GPSService
 {
     class AuxSql
     {
+        const string DB_HOST = "localhost";
+        const string DB_DATABASE = "GEO";
+        const string DB_USER = "postgres";
+        const string DB_PASSWORD = "postgres";
+        const int DB_PORT = 5432;
+
         private static DbConnection conn;
         public static Exception Excepcion { get; set; }
 
-        public static bool TestServerConn(string servidor, string baseDatos, string usuario, string password, int puerto = 0)
+        /// <summary>
+        /// Test the connection to the database server
+        /// </summary>
+        /// <returns>Returns true if all ok, or false if fails</returns>
+        public static bool TestServerConn()
         {
             try
             {
                 NpgsqlConnectionStringBuilder csb = new NpgsqlConnectionStringBuilder()
                 {
-                    Host = servidor,
-                    Database = baseDatos,
-                    Username = usuario,
-                    Password = password,
-                    Port = puerto == 0 ? 5432 : puerto,
+                    Host = DB_HOST,
+                    Database = DB_DATABASE,
+                    Username = DB_USER,
+                    Password = DB_PASSWORD,
+                    Port = DB_PORT,
                     CommandTimeout = 20,
                     PersistSecurityInfo = true,
                 };
@@ -45,6 +55,10 @@ namespace GPSService
             return AuxSql.conn != null;
         }
 
+        /// <summary>
+        /// Returns a connection that uses the same parameters as the initial connection
+        /// </summary>
+        /// <returns></returns>
         private static DbConnection DuplicateConn()
         {
             if (AuxSql.conn is ICloneable origPg)
@@ -57,6 +71,11 @@ namespace GPSService
             return null;
         }
 
+        /// <summary>
+        /// Create a DbCommand object and execute the function it receives as a parameter.
+        /// It's just a container to simplify the code
+        /// </summary>
+        /// <param name="fnProccess">Function that will be executed. Receives the DbCommand object as parameter</param>
         public static void Exec(Action<DbCommand> fnProccess)
         {
             using (DbConnection conn = AuxSql.DuplicateConn())
@@ -69,6 +88,13 @@ namespace GPSService
         }
 
 
+        /// <summary>
+        /// Adds a parameter (with an optional value) to a DbCommand object
+        /// </summary>
+        /// <param name="cmd">DbCommand object</param>
+        /// <param name="name">Parameter name</param>
+        /// <param name="type">Parameter type</param>
+        /// <param name="valor">Parameter value</param>
         public static void AddParam(DbCommand cmd, string name, DbType type, object valor = null)
         {
             if (cmd == null)
@@ -93,12 +119,14 @@ namespace GPSService
             return;
         }
 
+        /// <summary>
+        /// Executes the SQL statement of a DbCommand object and returns an integer value
+        /// </summary>
+        /// <param name="cmd">DbCommand object that contains the SQL sentence</param>
+        /// <returns></returns>
         public static int ReadInt(DbCommand cmd)
         {
             return AuxConvert.ToInt(cmd.ExecuteScalar());
         }
-
-
-
     }
 }

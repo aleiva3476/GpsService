@@ -9,14 +9,21 @@ namespace GPSService
 {
     class ConsultaGMaps
     {
-        const string googleApiKey = "AIzaSyAw-mDmLbsdfkjsdkjfsdfskldjfi0sjdfkldfksdufKEHEA5I";
+        const string GOOGLE_API_KEY = "MyGoogleApiKey";
 
+        /// <summary>
+        /// Connect with google and pick up the address corresponding to the location
+        /// </summary>
+        /// <param name="idGps"></param>
+        /// <param name="lng"></param>
+        /// <param name="lat"></param>
+        /// <param name="delegadoFinLectura"></param>
         public static async void LeeDireccion(int idGps, double lng, double lat, Action<int, int> delegadoFinLectura)
         {
             
             int idDireccion = 0;
             NumberFormatInfo nfi = new NumberFormatInfo() { NumberDecimalSeparator = "." };
-            string requestUri = string.Format(nfi, "https://maps.googleapis.com/maps/api/geocode/json?latlng={0},{1}&key={2}&esult_type=street_address", lat, lng, googleApiKey);
+            string requestUri = string.Format(nfi, "https://maps.googleapis.com/maps/api/geocode/json?latlng={0},{1}&key={2}&esult_type=street_address", lat, lng, GOOGLE_API_KEY);
 
             using (var client = new HttpClient())
             {
