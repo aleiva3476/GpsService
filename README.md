@@ -29,8 +29,8 @@ A file to create an installer with NSIS: x_NSIS_Installer_x/GPSService.nsi
 * Associates the 'gps' record with the 'direcciones' record
 
 #### PostgreSQL requirements
-Support for jsonb ( version >= 9.4 )
-PostGIS module (http://postgis.net)
+* Support for jsonb ( version >= 9.4 )
+* PostGIS module (http://postgis.net)
 
 #### Acknowledgment
 Meiligao proccess is based on: https://github.com/brimzi/meitrack-protocols
